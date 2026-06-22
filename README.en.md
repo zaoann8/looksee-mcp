@@ -20,7 +20,8 @@ Vision + Search, one MCP server.
 - **Any OpenAI-compatible endpoint** — GPT-4o, Grok, Kimi, Qwen-VL, MiniMax, vLLM all work. Swap APIs by changing one URL
 - **Vision + Search in one process** — no need for multiple MCP servers
 - **Paste & analyze** — clipboard images auto-detected on macOS, zero extra clicks
-- **Minimal config** — 4 environment variables, ready in one minute
+- **Minimal config** — 5 environment variables, ready in one minute
+- **curl_cffi optional** — uses standard browser TLS fingerprint for better fetch reliability
 
 ## Quick Start
 
@@ -56,31 +57,39 @@ Open VSCode → Cmd+Shift+P → `Claude: Open Settings`, or edit `~/.claude.json
 
 **3. Restart Claude Code**
 
-Cmd+Shift+P → `Developer: Reload Window`, or type `/mcp` in Claude Code to verify `looksee-mcp ✔ connected · 4 tools`.
+Cmd+Shift+P → `Developer: Reload Window`, or type `/mcp` in Claude Code to verify `looksee-mcp ✔ connected · 7 tools`.
 
 **4. Start using**
 
 - Screenshot/copy an image → paste into chat → "Analyze this image" → auto-detected
 - Drop images into your project folder → "Analyze all images in images/"
 - "Search for XXX" → AI-powered web search
+- "Fetch https://xxx article" → auto-fetch + AI summary
+- "Check backend health" → one-click connectivity diagnosis
 
 ## Tools
 
-| Tool               | What it does                          | When to use                           |
-| :----------------- | :------------------------------------ | :------------------------------------ |
-| `vision_clipboard` | Reads image from system clipboard     | Screenshot then paste into chat       |
-| `vision_file`      | Reads image from file path            | Image files already in your project   |
-| `vision_dir`       | Batch reads all images in a directory | Dropped multiple images into a folder |
-| `web_search`       | AI-powered web search                 | Real-time information lookup          |
+| Tool               | What it does                                                        | When to use                           |
+| :----------------- | :------------------------------------------------------------------ | :------------------------------------ |
+| `vision_clipboard` | Reads image from system clipboard                                   | Screenshot then paste into chat       |
+| `vision_file`      | Reads image from file path                                          | Image files already in your project   |
+| `vision_dir`       | Batch reads all images in a directory                               | Dropped multiple images into a folder |
+| `web_search`       | AI-powered web search, returns session_id for pagination            | Real-time information lookup          |
+| `web_fetch`        | Fetches URL, strips HTML, AI-powered summary                        | Reading articles / documentation      |
+| `get_sources`      | Retrieves cached sources from search by session_id, with pagination | Page through search results           |
+| `doctor`           | Diagnoses API endpoint, vision/search model connectivity            | Troubleshooting, config validation    |
 
 ## Configuration
 
-| Variable               | Description                        | Default                     |
-| :--------------------- | :--------------------------------- | :-------------------------- |
-| `LOOKSEE_BASE_URL`     | OpenAI-compatible API base URL     | `https://api.openai.com/v1` |
-| `LOOKSEE_API_KEY`      | API key                            | —                           |
-| `LOOKSEE_VISION_MODEL` | Vision model (must support images) | `gpt-4o`                    |
-| `LOOKSEE_SEARCH_MODEL` | Search model                       | `gpt-4o-mini`               |
+| Variable               | Description                                                 | Default                     |
+| :--------------------- | :---------------------------------------------------------- | :-------------------------- |
+| `LOOKSEE_BASE_URL`     | OpenAI-compatible API base URL                              | `https://api.openai.com/v1` |
+| `LOOKSEE_API_KEY`      | API key                                                     | —                           |
+| `LOOKSEE_VISION_MODEL` | Vision model (must support images)                          | `gpt-4o`                    |
+| `LOOKSEE_SEARCH_MODEL` | Search model                                                | `gpt-4o-mini`               |
+| `LOOKSEE_FETCH_MODEL`  | Web page summary model (optional, no AI summary without it) | —                           |
+
+> Tip: install `curl_cffi` (`pip install curl_cffi`) for standard browser TLS fingerprint simulation, improving page fetch reliability.
 
 ## License
 
